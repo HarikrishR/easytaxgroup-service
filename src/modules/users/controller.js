@@ -36,6 +36,24 @@ exports.signInUser = async (req, res, next) => {
   }
 };
 
+exports.fetchUserById = async (req, res, next) => {
+  try {
+    const userData = req.body;
+    var user = await userService.fetchUserById(userData);
+
+    res.status(200).json({
+      status: "success",
+      message: "User found!",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
 exports.getAllUsers = async (req, res, next) => {
   try {
     const users = await userService.getUsers(req.query);

@@ -44,6 +44,8 @@ exports.createUser = async (userData) => {
     // Add the token to the user data
     userData.token = token;
 
+    userData.userId = Math.random().toString(36).substring(2, 8).toUpperCase();
+
     // Create the user
     const newUser = await User.create(userData);
     return newUser;
@@ -77,7 +79,29 @@ exports.signInUser = async (userData) => {
 
     // Return the user details (excluding sensitive information like password)
     const { password: _, ...userWithoutPassword } = existingUser.toJSON();
-    console.log(userWithoutPassword);
+    return userWithoutPassword;
+  } catch (error) {
+    console.error("Error during user sign-in:", error.message);
+    throw new Error(error.message || "An error occurred during user sign-in.");
+  }
+};
+
+exports.fetchUserById = async (userData) => {
+  try {
+    // Validate required fields
+    const { userId } = userData;
+
+    // Check if the user exists
+    const existingUser = await User.findOne({
+      where: { userId },
+    });
+
+    if (!existingUser) {
+      throw new Error("User not exists.");
+    }
+
+    // Return the user details (excluding sensitive information like password)
+    const { password: _, ...userWithoutPassword } = existingUser.toJSON();
     return userWithoutPassword;
   } catch (error) {
     console.error("Error during user sign-in:", error.message);

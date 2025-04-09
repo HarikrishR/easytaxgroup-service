@@ -3,6 +3,7 @@ const Joi = require("joi");
 module.exports = {
   create: Joi.object().keys({
     id: Joi.number().allow(null),
+    userId: Joi.string().required(),
     name: Joi.string().required(),
     phoneNumber: Joi.string().required(),
     email: Joi.string().required(),
