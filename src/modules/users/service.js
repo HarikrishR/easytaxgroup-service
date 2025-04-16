@@ -104,8 +104,28 @@ exports.fetchUserById = async (userData) => {
     const { password: _, ...userWithoutPassword } = existingUser.toJSON();
     return userWithoutPassword;
   } catch (error) {
-    console.error("Error during user sign-in:", error.message);
-    throw new Error(error.message || "An error occurred during user sign-in.");
+    throw new Error(error.message || "An error occurred during get users by ID.");
+  }
+};
+
+exports.fetchUsers = async () => {
+  try {
+
+    // Check if the user exists
+    const existingUsers = await User.findAll({
+      where: {
+      type: {
+        [Op.ne]: "ADMIN",
+      },
+      },
+    });
+    return existingUsers.map(user => {
+      const { password: _, ...userWithoutPassword } = user.toJSON();
+      return userWithoutPassword;
+    });
+
+  } catch (error) {
+    throw new Error(error.message || "An error occurred during fetch users.");
   }
 };
 

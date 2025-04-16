@@ -4,7 +4,8 @@ module.exports = {
   create: Joi.object().keys({
     id: Joi.number().allow(null),
     userId: Joi.string().required(),
-    name: Joi.string().required(),
+    firstName: Joi.string().required(),
+    lastName: Joi.string().required(),
     phoneNumber: Joi.string().required(),
     email: Joi.string().required(),
     password: Joi.string().required(),
@@ -12,7 +13,6 @@ module.exports = {
     gender: Joi.string().valid("Male", "Female", "Other"),
     createdAt: Joi.date(),
     updatedAt: Joi.date(),
-    deletedAt: Joi.date().allow(null),
   }),
 
   update: Joi.object().keys({
@@ -22,6 +22,5 @@ module.exports = {
     gender: Joi.string().valid("Male", "Female", "Other"),
     createdAt: Joi.date(),
     updatedAt: Joi.date(),
-    deletedAt: Joi.date().allow(null),
   }),
 };

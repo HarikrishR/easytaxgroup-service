@@ -54,18 +54,20 @@ exports.fetchUserById = async (req, res, next) => {
   }
 };
 
-exports.getAllUsers = async (req, res, next) => {
+exports.fetchUsers = async (req, res, next) => {
   try {
-    const users = await userService.getUsers(req.query);
+    var user = await userService.fetchUsers();
 
     res.status(200).json({
       status: "success",
-      data: {
-        users,
-      },
+      message: "User found!",
+      data: user,
     });
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
   }
 };
 

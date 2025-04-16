@@ -16,7 +16,11 @@ const User = sequelize.define(
       type: DataTypes.STRING(100),
       allowNull: false,
     },
-    name: {
+    firstName: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
+    },
+    lastName: {
       type: DataTypes.STRING(100),
       allowNull: false,
     },
@@ -40,18 +44,35 @@ const User = sequelize.define(
     },
     gender: {
       type: DataTypes.ENUM(["Male", "Female", "Other"]),
-      allowNull: false,
+      allowNull: true,
+    },
+    address: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
+    street: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    city: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    state: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    zipcode: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
     },
     createdAt: {
       type: DataTypes.DATE,
     },
-    deletedAt: {
-      type: DataTypes.DATE,
-      allowNull: true,
-    },
     token: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: true,
     },
   },
   {
