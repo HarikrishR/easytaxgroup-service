@@ -1,6 +1,7 @@
 const User = require("./model");
 const { Op } = require("sequelize");
 const CryptoJS = require("crypto-js");
+const Form8843Data = require("./form8843DataModel"); // Assuming you have a model for form8843_data
 
 exports.getUsers = (query) => {
   //   -> add pagination
@@ -132,4 +133,31 @@ exports.fetchUsers = async () => {
 exports.updateUser = async (data, filter) => {
   const result = await User.update(data, filter);
   return result;
+};
+
+
+exports.updateForm8843 = async (userData) => {
+  try {
+    // Validate required fields
+    const { userId } = userData;
+
+    // Check if the user exists
+    const existingUser = await User.findOne({
+      where: { userId },
+    });
+
+    if (!existingUser) {
+      await Form8843Data.create(userData);
+      throw new Error("User not exists.");
+    }
+    else {
+        await Form8843Data.update(userData, {
+          where: { userId },
+        });
+    }
+    const { password: _, ...userWithoutPassword } = existingUser.toJSON();
+    return userWithoutPassword;
+  } catch (error) {
+    throw new Error(error.message || "An error occurred during updating form 8843.");
+  }
 };

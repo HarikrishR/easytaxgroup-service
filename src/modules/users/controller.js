@@ -91,3 +91,20 @@ exports.updateById = async (req, res, next) => {
     console.error(error);
   }
 };
+
+exports.updateForm8843 = async (req, res, next) => {
+  try {
+    const userData = req.body;
+    await userService.updateForm8843(userData);
+
+    res.status(200).json({
+      status: "success",
+      message: "Form 8843 updated successfully."
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
