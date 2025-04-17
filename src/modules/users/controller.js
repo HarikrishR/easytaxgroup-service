@@ -1,4 +1,5 @@
 const userService = require("./service");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 exports.addUser = async (req, res, next) => {
   try {
@@ -125,5 +126,20 @@ exports.fetchFrom8843ById = async (req, res, next) => {
       status: 400,
       message: error.message,
     });
+  }
+};
+
+exports.createCheckoutSession = async (req, res, next) => {
+    try {
+      const paymentIntent = await await stripe.paymentIntents.create({
+        amount: 1099,
+        currency: "eur",
+        payment_method_types: ["bancontact", "card"],
+      });
+      console.log(paymentIntent);
+
+      res.json({client_secret: paymentIntent.client_secret});
+  } catch (error) {
+      res.status(500).json({ error: error.message });
   }
 };
