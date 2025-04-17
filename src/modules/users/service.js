@@ -142,22 +142,43 @@ exports.updateForm8843 = async (userData) => {
     const { userId } = userData;
 
     // Check if the user exists
-    const existingUser = await User.findOne({
+    const existingUser = await Form8843Data.findOne({
       where: { userId },
     });
 
     if (!existingUser) {
       await Form8843Data.create(userData);
-      throw new Error("User not exists.");
     }
     else {
         await Form8843Data.update(userData, {
           where: { userId },
         });
     }
+    
+    return "Updated successfully";
+  } catch (error) {
+    throw new Error(error.message || "An error occurred during updating form 8843.");
+  }
+};
+
+exports.fetchFrom8843ById = async (userData) => {
+  try {
+    // Validate required fields
+    const { userId } = userData;
+
+    // Check if the user exists
+    const existingUser = await Form8843Data.findOne({
+      where: { userId },
+    });
+
+    if (!existingUser) {
+      return {};
+    }
+
+    // Return the user details (excluding sensitive information like password)
     const { password: _, ...userWithoutPassword } = existingUser.toJSON();
     return userWithoutPassword;
   } catch (error) {
-    throw new Error(error.message || "An error occurred during updating form 8843.");
+    throw new Error(error.message || "An error occurred during get form8843 by ID.");
   }
 };
