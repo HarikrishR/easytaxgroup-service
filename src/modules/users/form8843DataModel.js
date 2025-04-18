@@ -34,22 +34,6 @@ const Form8843Data = sequelize.define(
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
-    street: {
-      type: DataTypes.STRING(100),
-      allowNull: true,
-    },
-    city: {
-      type: DataTypes.STRING(50),
-      allowNull: true,
-    },
-    zipcode: {
-      type: DataTypes.STRING(20),
-      allowNull: true,
-    },
-    state: {
-      type: DataTypes.STRING(50),
-      allowNull: true,
-    },
     passportNumber: {
       type: DataTypes.STRING(20),
       allowNull: true,

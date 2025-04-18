@@ -3,6 +3,7 @@ const CryptoJS = require("crypto-js");
 const sequelize = require("../../utils/db"); // Import the database connection
 const { validatePayload } = require("../../utils");
 const userJoiSchema = require("./joiSchema");
+const Form8843Data = require("./form8843DataModel");
 
 const User = sequelize.define(
   "user",
@@ -46,7 +47,7 @@ const User = sequelize.define(
       type: DataTypes.ENUM(["Male", "Female", "Other"]),
       allowNull: true,
     },
-    ssnNumber: {
+    ssn: {
       type: DataTypes.STRING(20),
       allowNull: true,
     },
@@ -141,5 +142,10 @@ User.verifyPassword = function (inputPassword, hashedPassword) {
 User.prototype.getEmail = function () {
   return this.email.toLowerCase();
 };
+
+User.hasOne(Form8843Data, {
+  foreignKey: "userId",
+  as: "userDetails",
+});
 
 module.exports = User;

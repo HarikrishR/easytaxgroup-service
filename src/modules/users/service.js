@@ -137,7 +137,7 @@ exports.updateUser = async (data, filter) => {
 
 
 exports.updateForm8843 = async (userData) => {
-  try {
+  try { 
     // Validate required fields
     const { userId } = userData;
 
@@ -150,10 +150,14 @@ exports.updateForm8843 = async (userData) => {
       await Form8843Data.create(userData);
     }
     else {
-        await Form8843Data.update(userData, {
-          where: { userId },
-        });
+      await Form8843Data.update(userData, {
+      where: { userId },
+      });
     }
+
+    await User.update(userData, {
+      where: { userId },
+    });
     
     return "Updated successfully";
   } catch (error) {
@@ -166,9 +170,17 @@ exports.fetchFrom8843ById = async (userData) => {
     // Validate required fields
     const { userId } = userData;
 
+    Form8843Data.belongsTo(User, { foreignKey: "userId", targetKey: "userId" });
+
     // Check if the user exists
     const existingUser = await Form8843Data.findOne({
       where: { userId },
+      include: [
+      {
+        model: User,
+        attributes: { exclude: ["password", "userId", "id", "address", "usaAddress", "gender", "createdAt", "token", "deletedAt", "updatedAt"] }, // Exclude sensitive information
+      },
+      ],
     });
 
     if (!existingUser) {
@@ -176,9 +188,9 @@ exports.fetchFrom8843ById = async (userData) => {
     }
 
     // Return the user details (excluding sensitive information like password)
-    const { password: _, ...userWithoutPassword } = existingUser.toJSON();
-    return userWithoutPassword;
+    const data = existingUser.toJSON();
+    return data;
   } catch (error) {
-    throw new Error(error.message || "An error occurred during get form8843 by ID.");
+    throw new Error(error.message || "An error occurred while fetching form8843 by ID.");
   }
 };
