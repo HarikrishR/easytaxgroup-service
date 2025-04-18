@@ -46,6 +46,10 @@ const User = sequelize.define(
       type: DataTypes.ENUM(["Male", "Female", "Other"]),
       allowNull: true,
     },
+    ssnNumber: {
+      type: DataTypes.STRING(20),
+      allowNull: true,
+    },
     address: {
       type: DataTypes.STRING(200),
       allowNull: true,
@@ -63,6 +67,26 @@ const User = sequelize.define(
       allowNull: true,
     },
     zipcode: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    usaAddress: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
+    usaStreet: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    usaCity: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    usaState: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    usaZipcode: {
       type: DataTypes.STRING(50),
       allowNull: true,
     },
