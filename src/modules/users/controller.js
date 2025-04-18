@@ -131,10 +131,11 @@ exports.fetchFrom8843ById = async (req, res, next) => {
 
 exports.createCheckoutSession = async (req, res, next) => {
     try {
-      const paymentIntent = await await stripe.paymentIntents.create({
-        amount: 1099,
-        currency: "eur",
-        payment_method_types: ["bancontact", "card"],
+      const { amount } = req.body;
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: amount,
+        currency: "usd",
+        payment_method_types: ["card"],
       });
       console.log(paymentIntent);
 
