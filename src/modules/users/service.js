@@ -63,6 +63,7 @@ exports.signInUser = async (userData) => {
     // Check if the user exists
     const existingUser = await User.findOne({
       where: { email },
+      attributes: { exclude: ["firstName", "lastName","email", "phoneNumber", "id","ssn", "address", "street", "state", "city", "zipcode", "usaAddress", "usaStreet", "usaState", "usaCity", "usaZipcode", "gender", "createdAt", "deletedAt", "updatedAt"] }, // Exclude sensitive information
     });
 
     if (!existingUser) {
@@ -94,6 +95,7 @@ exports.fetchUserById = async (userData) => {
     // Check if the user exists
     const existingUser = await User.findOne({
       where: { userId },
+      attributes: { exclude: ["password", "id", "gender", "createdAt", "token", "deletedAt", "updatedAt"] }, // Exclude sensitive information
     });
 
     if (!existingUser) {
