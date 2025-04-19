@@ -19,7 +19,7 @@ app.use(cors());
 app.use(limiter);
 
 
-const myRouter = require('./modules/users/index'); // Path to your router file
+const myRouter = require('./modules/index'); // Path to your router file
 app.use('/', myRouter);
 
 // changes added from remote

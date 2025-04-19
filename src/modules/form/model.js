@@ -1,8 +1,8 @@
-// filepath: /Users/harikrishnanr/Documents/freelance/easyTaxGroupService/easytaxgroup-service/src/modules/users/form8843DataModel.js
+// filepath: /Users/harikrishnanr/Documents/freelance/easyTaxGroupService/easytaxgroup-service/src/modules/users/form8843Model.js
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../utils/db"); // Import the database connection
 
-const Form8843Data = sequelize.define(
+const Form8843 = sequelize.define(
   "form8843_data",
   {
     id: {
@@ -85,4 +85,4 @@ const Form8843Data = sequelize.define(
   }
 );
 
-module.exports = Form8843Data;
+module.exports = Form8843;

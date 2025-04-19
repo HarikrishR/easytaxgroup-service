@@ -24,3 +24,19 @@ CREATE TABLE form8843_data (
 GRANT SELECT, INSERT, UPDATE, DELETE ON form8843_data TO "harikrishnanr";
 
 GRANT USAGE, SELECT, UPDATE ON SEQUENCE form8843_data_id_seq TO "harikrishnanr";
+
+CREATE TABLE transactions (
+    "id" SERIAL PRIMARY KEY,
+    "userId" VARCHAR(100) NOT NULL, 
+    "paymentId" VARCHAR(300) NOT NULL, 
+    "amount" INTEGER NOT NULL, 
+    "currency" VARCHAR(50) NOT NULL, 
+    "status" VARCHAR(50) NOT NULL, 
+    "liveMode" BOOLEAN NOT NULL, 
+    "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+GRANT SELECT, INSERT, UPDATE, DELETE ON transactions TO "harikrishnanr";
+
+GRANT USAGE, SELECT, UPDATE ON SEQUENCE transactions TO "harikrishnanr";

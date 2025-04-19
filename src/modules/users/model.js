@@ -3,7 +3,7 @@ const CryptoJS = require("crypto-js");
 const sequelize = require("../../utils/db"); // Import the database connection
 const { validatePayload } = require("../../utils");
 const userJoiSchema = require("./joiSchema");
-const Form8843Data = require("./form8843DataModel");
+const Form8843= require("../form/model");
 
 const User = sequelize.define(
   "user",
@@ -143,7 +143,7 @@ User.prototype.getEmail = function () {
   return this.email.toLowerCase();
 };
 
-User.hasOne(Form8843Data, {
+User.hasOne(Form8843, {
   foreignKey: "userId",
   as: "userDetails",
 });
