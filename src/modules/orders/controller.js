@@ -1,13 +1,13 @@
 const service = require("./service");
 
-exports.createCheckoutSession = async (req, res, next) => {
+exports.createOrder = async (req, res, next) => {
   try {
     const userData = req.body;
-    const data = await service.createTransaction(userData);
+    const data = await service.createOrder(userData);
 
     res.status(200).json({
       status: "success",
-      message: "Transaction created successfully!",
+      message: "Order created successfully!",
       data: data,
     });
   } catch (error) {
@@ -18,15 +18,15 @@ exports.createCheckoutSession = async (req, res, next) => {
   }
 };
 
-exports.updateTransaction = async (req, res, next) => {
+exports.fetchOrdersById = async (req, res, next) => {
   try {
     const userData = req.body;
-    const data = await service.updateTransaction(userData);
+    var user = await service.fetchOrdersById(userData);
 
     res.status(200).json({
       status: "success",
-      message: "Transaction created successfully!",
-      data: data,
+      message: "Orders found!",
+      data: user,
     });
   } catch (error) {
     return res.status(400).json({

@@ -1,0 +1,37 @@
+const User = require("../users/model");
+const { Op } = require("sequelize");
+const CryptoJS = require("crypto-js");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
+const Orders = require("./model"); // Assuming you have a model for form8843_data
+
+exports.createOrder = async (userData) => {
+    try {
+      const { amount, userId } = userData;
+
+      userData.orderId = Math.random().toString(36).substring(2, 8).toUpperCase();
+  
+      var data = await Orders.create(userData);
+  
+      return data
+  
+    } catch (error) {
+      throw new Error(error.message || "An error occurred while creating order.");
+    }
+  };
+
+  exports.fetchOrdersById = async (userData) => {
+    try {
+      // Validate required fields
+      const { userId } = userData;
+  
+      // Check if the user exists
+    const orders = await Orders.findAll({
+      where: { userId },
+      attributes: { exclude: ["id", "updatedAt"] }, // Exclude sensitive information
+    });
+  
+      return orders;
+    } catch (error) {
+      throw new Error(error.message || "An error occurred during get orders by ID.");
+    }
+  };

@@ -2,50 +2,50 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../utils/db"); // Import the database connection
 
-const Transactions = sequelize.define(
-  "transactions",
+const Orders = sequelize.define(
+  "orders",
   {
     id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
     },
+    orderId: {
+        type: DataTypes.STRING(500),
+        allowNull: false,
+    },
     userId: {
         type: DataTypes.STRING(100),
         allowNull: false,
     },
     paymentId: {
-      type: DataTypes.STRING(300),
+      type: DataTypes.STRING(200),
       allowNull: false,
     },
-    clientSecret: {
-      type: DataTypes.STRING(500),
-      allowNull: false,
+    form: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
     },
-    amount: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
-    currency: {
-      type: DataTypes.STRING(50),
-      allowNull: false,
+    submittedYear: {
+        type: DataTypes.ARRAY(DataTypes.JSONB),
+        allowNull: true,
     },
     status: {
       type: DataTypes.STRING(50),
       allowNull: false,
     },
-    liveMode: {
-      type: DataTypes.BOOLEAN,
-      allowNull: false,
+    paymentStatus: {
+        type: DataTypes.STRING(50),
+        allowNull: false,
     },
     createdAt: {
       type: DataTypes.DATE,
     },
   },
   {
-    tableName: "transactions",
+    tableName: "orders",
     timestamps: true,
   }
 );
 
-module.exports = Transactions;
+module.exports = Orders;

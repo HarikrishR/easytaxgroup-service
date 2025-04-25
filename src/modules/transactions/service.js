@@ -1,34 +1,51 @@
 const User = require("../users/model");
 const { Op } = require("sequelize");
 const CryptoJS = require("crypto-js");
+const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const Transaction = require("./model"); // Assuming you have a model for form8843_data
 
 
-exports.updateTransaction = async (userData) => {
-  try { 
-    // Validate required fields
-    const { userId } = userData;
-
-    // Check if the user exists
-    const existingUser = await Transaction.findOne({
-      where: { userId },
+exports.createTransaction = async (userData) => {
+  try {
+    const { amount, userId } = userData;
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount: amount,
+      currency: "usd",
+      payment_method_types: ["card"],
     });
+    console.log(paymentIntent);
 
-    if (!existingUser) {
-      await Transaction.create(userData);
-    }
-    else {
-      await Transaction.update(userData, {
-      where: { userId },
-      });
+    var transactionObj = {
+      userId: userId,
+      amount: paymentIntent.amount,
+      currency: paymentIntent.currency,
+      paymentId: paymentIntent.id,
+      clientSecret: paymentIntent.client_secret,
+      status: paymentIntent.status,
+      liveMode: paymentIntent.livemode,
+      createdAt: new Date(paymentIntent.created * 1000).toISOString()
     }
 
-    await Transaction.update(userData, {
-      where: { userId },
-    });
-    
-    return "Updated successfully";
+    var data = await Transaction.create(transactionObj);
+
+    return data
+
   } catch (error) {
-    throw new Error(error.message || "An error occurred during updating form 8843.");
+    throw new Error(error.message || "An error occurred while creating transaction.");
+  }
+};
+
+exports.updateTransaction = async (userData) => {
+  try {
+    const { paymentId } = userData;
+    
+    var data = await Transaction.update(userData, {
+      where: { paymentId: paymentId }
+    });
+
+    return data
+
+  } catch (error) {
+    throw new Error(error.message || "An error occurred while updating transaction.");
   }
 };
