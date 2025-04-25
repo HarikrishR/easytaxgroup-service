@@ -14,6 +14,7 @@ router.post("/createCheckoutSession", transaction.createCheckoutSession);
 router.post("/updateTransaction", transaction.updateTransaction);
 router.post("/createOrder", orders.createOrder);
 router.post("/fetchOrdersById", orders.fetchOrdersById);
+router.get("/fetchOrders", orders.fetchOrders);
 
 module.exports = router;
  

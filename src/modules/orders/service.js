@@ -19,6 +19,19 @@ exports.createOrder = async (userData) => {
     }
   };
 
+  exports.fetchOrders = async () => {
+    try {
+  
+      // Check if the user exists
+      const existingOrders = await Orders.findAll();
+
+      return existingOrders;
+  
+    } catch (error) {
+      throw new Error(error.message || "An error occurred during fetching all orders.");
+    }
+  };
+
   exports.fetchOrdersById = async (userData) => {
     try {
       // Validate required fields
