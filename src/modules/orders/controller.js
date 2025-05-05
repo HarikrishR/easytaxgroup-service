@@ -52,3 +52,21 @@ exports.fetchOrdersById = async (req, res, next) => {
     });
   }
 };
+
+exports.updateOrderStatus= async (req, res, next) => {
+  try {
+    const orderData = req.body;
+    const data = await service.updateOrderStatus(orderData);
+
+    res.status(200).json({
+      status: "success",
+      message: "Status updated successfully!",
+      data: data,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};

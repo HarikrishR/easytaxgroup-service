@@ -28,6 +28,7 @@ exports.updateForm = async (userData) => {
     
     return "Updated successfully";
   } catch (error) {
+    console.log(error);
     throw new Error(error.message || "An error occurred during updating form 8843.");
   }
 };

@@ -1,7 +1,7 @@
 // filepath: /Users/harikrishnanr/Documents/freelance/easyTaxGroupService/easytaxgroup-service/src/modules/users/form8843Model.js
 const { DataTypes } = require("sequelize");
 const sequelize = require("../../utils/db"); // Import the database connection
-
+const Orders = require("../orders/model"); // Import the Orders model
 const Form8843 = sequelize.define(
   "form8843_data",
   {
@@ -9,6 +9,10 @@ const Form8843 = sequelize.define(
       type: DataTypes.INTEGER,
       primaryKey: true,
       autoIncrement: true,
+    },
+    userId: {
+      type: DataTypes.STRING(100),
+      allowNull: false,
     },
     visaType: {
       type: DataTypes.STRING(50),
@@ -70,10 +74,6 @@ const Form8843 = sequelize.define(
       type: DataTypes.STRING(50),
       allowNull: true,
     },
-    userId: {
-      type: DataTypes.STRING(100),
-      allowNull: false,
-    },
     noOfDaysUSA: {
       type: DataTypes.ARRAY(DataTypes.JSONB),
       allowNull: true,
@@ -84,5 +84,10 @@ const Form8843 = sequelize.define(
     timestamps: true,
   }
 );
+
+Form8843.hasOne(Orders, {
+  foreignKey: "userId",
+  as: "form8843_details",
+});
 
 module.exports = Form8843;

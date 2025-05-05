@@ -30,6 +30,10 @@ const Orders = sequelize.define(
         type: DataTypes.ARRAY(DataTypes.JSONB),
         allowNull: true,
     },
+    trackingLink: {
+        type: DataTypes.STRING(5000),
+        allowNull: true,
+    },
     status: {
       type: DataTypes.STRING(50),
       allowNull: false,
@@ -37,6 +41,10 @@ const Orders = sequelize.define(
     paymentStatus: {
         type: DataTypes.STRING(50),
         allowNull: false,
+    },
+    noOfDaysUSA: {
+        type: DataTypes.ARRAY(DataTypes.JSONB),
+        allowNull: true,
     },
     createdAt: {
       type: DataTypes.DATE,
