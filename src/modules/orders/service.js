@@ -38,6 +38,7 @@ exports.createOrder = async (userData) => {
             attributes: { exclude: ["id", "createdAt", "updatedAt"] }, // Exclude sensitive information
         },
       ],
+      order: [["createdAt", "DESC"]], // Fetch data in descending order based on creation date
     });
 
       return existingOrders;
