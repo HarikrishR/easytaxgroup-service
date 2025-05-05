@@ -69,6 +69,7 @@ exports.createOrder = async (userData) => {
     const orders = await Orders.findAll({
       where: { userId },
       attributes: { exclude: ["id", "updatedAt"] }, // Exclude sensitive information
+      order: [["createdAt", "DESC"]]
     });
   
       return orders;
