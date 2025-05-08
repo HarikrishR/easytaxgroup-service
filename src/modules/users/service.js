@@ -119,7 +119,6 @@ exports.fetchUsers = async () => {
       type: {
         [Op.ne]: "ADMIN",
       },
-      order: [["createdAt", "DESC"]]
       },
     });
     return existingUsers.map(user => {

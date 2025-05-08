@@ -34,6 +34,10 @@ const Orders = sequelize.define(
         type: DataTypes.STRING(5000),
         allowNull: true,
     },
+    trackingNumber: {
+        type: DataTypes.STRING(200),
+        allowNull: true,
+    },
     status: {
       type: DataTypes.STRING(50),
       allowNull: false,
