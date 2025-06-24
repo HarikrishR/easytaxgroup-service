@@ -20,7 +20,7 @@ app.use(limiter);
 
 
 const myRouter = require('./modules/index'); // Path to your router file
-app.use('/', myRouter);
+app.use('/api', myRouter);
 
 // changes added from remote
 

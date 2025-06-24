@@ -4,7 +4,7 @@ const config = {
     database: process.env.DB_DATABASE,
     user: process.env.DB_USERNAME,
     password: process.env.DB_PASSWORD,
-    port: 5433,
+    port: process.env.DB_PORT,
     dialect: 'postgres'
   },
 
@@ -25,10 +25,10 @@ const config = {
     port: process.env.DB_PORT,
     dialect: 'postgres',
     dialectOptions: {
-      ssl: {
-        require: true,
-        rejectUnauthorized: true, // Validates the SSL certificate
-      },
+      // ssl: {
+      //   require: true,
+      //   rejectUnauthorized: true, // Validates the SSL certificate
+      // },
       connectTimeout: 10000,
       // connectionTimeoutMillis: 0.001, // PostgreSQL
       // requestTimeoutMillis: 15000, // PostgreSQL

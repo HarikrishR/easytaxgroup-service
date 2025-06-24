@@ -9,7 +9,7 @@ exports.createTransaction = async (userData) => {
   try {
     const { amount, userId } = userData;
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amount,
+      amount: Math.round(amount * 100), // Convert dollars to cents
       currency: "usd",
       payment_method_types: ["card"],
     });

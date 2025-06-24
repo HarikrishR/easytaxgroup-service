@@ -8,7 +8,7 @@
     "start": "NODE_ENV=local nodemon server.js",
     "start:local": "NODE_ENV=local nodemon server.js",
     "dev": "NODE_ENV=dev nodemon server.js",
-    "prod": "NODE_ENV=prod nodemon server.js"
+    "start:prod": "NODE_ENV=prod nodemon server.js"
   },
   "author": "",
   "license": "ISC",

@@ -41,17 +41,18 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON transactions TO "harikrishnanr";
 
 GRANT USAGE, SELECT, UPDATE ON SEQUENCE transactions TO "harikrishnanr";
 
-CREATE TABLE orders (
-    "id" SERIAL PRIMARY KEY,
-    "orderId" VARCHAR(500) NOT NULL,
-    "userId" VARCHAR(100) NOT NULL,
-    "paymentId" VARCHAR(200) NOT NULL,
-    "form" VARCHAR(50) NOT NULL,
-    "submittedYear" JSONB[],
-    "trackingLink" VARCHAR(5000),
-    "status" VARCHAR(50) NOT NULL,
-    "paymentStatus" VARCHAR(50) NOT NULL,
-    "noOfDaysUSA" JSONB[],
-    "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
-    "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
-);
+    CREATE TABLE orders (
+        "id" SERIAL PRIMARY KEY,
+        "orderId" VARCHAR(500) NOT NULL,
+        "userId" VARCHAR(100) NOT NULL, 
+        "paymentId" VARCHAR(200) NOT NULL,
+        "form" VARCHAR(50) NOT NULL,
+        "submittedYear" JSONB[],
+        "trackingNumber" VARCHAR(200) NOT NULL,
+        "trackingLink" VARCHAR(5000),
+        "status" VARCHAR(50) NOT NULL,
+        "paymentStatus" VARCHAR(50) NOT NULL,
+        "noOfDaysUSA" JSONB[],
+        "createdAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL,
+        "updatedAt" TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP NOT NULL
+    );
