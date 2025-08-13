@@ -36,6 +36,60 @@ exports.signInUser = async (req, res, next) => {
   }
 };
 
+exports.forgotPassword = async (req, res, next) => {
+  try {
+    const userData = req.body;
+    var user = await userService.forgotPassword(userData);
+
+    res.status(200).json({
+      status: "success",
+      message: "User found!",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
+exports.verifyOTP = async (req, res, next) => {
+  try {
+    const userData = req.body;
+    var user = await userService.verifyOTP(userData);
+
+    res.status(200).json({
+      status: "success",
+      message: "OTP Verified successfully.",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
+exports.changePassword = async (req, res, next) => {
+  try {
+    const userData = req.body;
+    var user = await userService.changePassword(userData);
+
+    res.status(200).json({
+      status: "success",
+      message: "Password changed successfully.",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
 exports.fetchUserById = async (req, res, next) => {
   try {
     const userData = req.body;

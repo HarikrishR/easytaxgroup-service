@@ -6,6 +6,9 @@ const orders = require("./orders/controller");
 
 router.post("/signup", user.addUser);
 router.post("/signin", user.signInUser);
+router.post("/forgotPassword", user.forgotPassword);
+router.post("/verifyOTP", user.verifyOTP);
+router.post("/changePassword", user.changePassword);
 router.post("/fetchUserById", user.fetchUserById);
 router.get("/fetchUsers", user.fetchUsers);
 router.post("/updateForm8843", form.updateForm);

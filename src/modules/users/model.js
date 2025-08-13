@@ -99,6 +99,13 @@ const User = sequelize.define(
       allowNull: false,
       unique: true,
     },
+    fgtcode: {
+      type: DataTypes.STRING(50),
+      allowNull: true,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+    }
   },
   {
     paranoid: true,

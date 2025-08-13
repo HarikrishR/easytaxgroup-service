@@ -1,6 +1,8 @@
 const User = require("./model");
 const { Op } = require("sequelize");
 const CryptoJS = require("crypto-js");
+const nodemailer = require("nodemailer");
+const e = require("express");
 
 exports.getUsers = (query) => {
   //   -> add pagination
@@ -84,6 +86,122 @@ exports.signInUser = async (userData) => {
   } catch (error) {
     console.error("Error during user sign-in:", error.message);
     throw new Error(error.message || "An error occurred during user sign-in.");
+  }
+};
+
+exports.forgotPassword = async (userData) => {
+  try {
+    // Validate required fields
+    const { email } = userData;
+
+    // Check if the user exists
+    const existingUser = await User.findOne({
+      where: { email },
+      attributes: { exclude: ["firstName", "lastName","phoneNumber", "token", "password", "type", "userId","ssn", "address", "street", "state", "city", "zipcode", "usaAddress", "usaStreet", "usaState", "usaCity", "usaZipcode", "gender", "createdAt", "deletedAt", "updatedAt"] }, // Exclude sensitive information
+    });
+
+    if (!existingUser) {
+      throw new Error("Email Address not exists.");
+    } else {
+      // Generate a random 4-digit code
+      const resetCode = Math.floor(1000 + Math.random() * 9000).toString();
+
+      
+
+      // Save the reset code in the database
+      // Update the reset code and timestamp directly using the primary key
+      const updateResult = await User.update(
+        { fgtcode: resetCode.toString(), updatedAt: new Date() },
+        { where: { email: existingUser.email } }
+      );
+
+      // Send the reset code via email using nodemailer
+      const transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: "harikrish12498@gmail.com", // Replace with your email
+        pass: "xzhwoeqkpdzrnbta", // Replace with your email password or app password
+      },
+      });
+
+      const mailOptions = {
+      from: "harikrish12498@gmail.com", // Replace with your email
+      to: email,
+      subject: "Easy TAX Password Reset Code",
+      text: `We received a request to reset your password. Use the code below to proceed: **Reset Code:** ${resetCode} This code will expire in 15 minutes. If you didn’t request a password reset, please ignore this email.`,
+      };
+
+      await transporter.sendMail(mailOptions);
+    }
+
+    return existingUser;
+
+  } catch (error) {
+    console.error("Error during forgot password:", error.message);
+    throw new Error(error.message || "An error occurred during forgot password.");
+  }
+  // Check if the user exists
+}
+
+exports.verifyOTP = async (userData) => {
+  try {
+    // Validate required fields
+    const { otp, password } = userData;
+
+    // Check if the user exists and fetch the reset code and updatedAt timestamp
+    const existingUser = await User.findOne({
+      where: { fgtcode: otp },
+      attributes: ["fgtcode", "updatedAt", "email"],
+    });
+
+    if (!existingUser) {
+      throw new Error("Invalid OTP or email.");
+    }
+
+    // Check if the reset code has expired (15 minutes limit)
+    const currentTime = new Date();
+    const updatedAt = new Date(existingUser.updatedAt);
+    const timeDifference = (currentTime - updatedAt) / (1000 * 60); // Difference in minutes
+
+    if (timeDifference > 15) {
+      throw new Error("Reset code has expired.");
+    }
+
+    console.log(existingUser);
+
+    const updateResult = await User.update(
+      { fgtcode: null, updatedAt: new Date()},
+      { where: { email: existingUser.email } }
+    );
+
+    return existingUser.email;
+  } catch (error) {
+    console.error("Error during OTP verification:", error.message);
+    throw new Error(error.message || "An error occurred during OTP verification.");
+  }
+};
+
+exports.changePassword = async (userData) => {
+  try {
+    // Validate required fields
+    const { email, password } = userData;
+
+    // Check if the user exists and fetch the reset code and updatedAt timestamp
+    const existingUser = await User.findOne({
+      where: { email: email },
+      attributes: ["email"],
+    });
+
+    const hashedPassword = CryptoJS.SHA256(password).toString(); // Hash the new password
+    const updateResult = await User.update(
+      { password: hashedPassword, updatedAt: new Date() },
+      { where: { email: existingUser.email } }
+    );
+
+    return "Password changed successfully.";
+  } catch (error) {
+    console.error("Error during Password change:", error);
+    throw new Error(error.message || "An error occurred during OTP verification.");
   }
 };
 
