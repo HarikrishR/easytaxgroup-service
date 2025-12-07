@@ -19,6 +19,7 @@ router.post("/createOrder", orders.createOrder);
 router.post("/fetchOrdersById", orders.fetchOrdersById);
 router.get("/fetchOrders", orders.fetchOrders);
 router.post("/updateOrderStatus", orders.updateOrderStatus);
+router.post("/usdotapplication", user.createUsdotapplication);
 
 module.exports = router;
  
