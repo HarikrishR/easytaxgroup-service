@@ -1,4 +1,5 @@
 const User = require("./model");
+const UsdotApplication = require("./us_model");
 const { Op } = require("sequelize");
 const CryptoJS = require("crypto-js");
 const nodemailer = require("nodemailer");
@@ -206,6 +207,7 @@ exports.changePassword = async (userData) => {
 };
 
 exports.fetchUserById = async (userData) => {
+  console.log(userData);
   try {
     // Validate required fields
     const { userId } = userData;
@@ -248,6 +250,99 @@ exports.fetchUsers = async () => {
     throw new Error(error.message || "An error occurred during fetch users.");
   }
 };
+
+
+exports.createUsdotapplication = async (userData) => {
+  try {
+    const {
+      firstName,
+      lastName,
+      businessName,
+      email,
+      areaCode,
+      phoneNumber,
+      serviceOffered,
+      typeOfProperty,
+      numberOfVehicles,
+      typeOfVehicle,
+      ownershipOfVehicle,
+      interstateIntrastate,
+      userId,
+      driversLicenseFileName,
+      businessLicenseFileName,
+    } = userData;
+
+    // Check if application already exists for this user
+    
+    const existingApplication = await UsdotApplication.findOne({
+      where: { userId },
+    });
+
+    if (existingApplication) {
+      throw new Error("USDOT application already exists for this user.");
+    }
+
+    // --- FIX START: Safely parse typeOfProperty if it's a string ---
+    let parsedTypeOfProperty = typeOfProperty;
+
+    if (typeof typeOfProperty === 'string') {
+        try {
+            // Attempt to parse the incoming string (e.g., "[\"Item1\",\"Item2\"]")
+            const tempParsed = JSON.parse(typeOfProperty);
+            
+            // If parsing results in a valid object/array, use it. Otherwise, use the original string as a single item.
+            parsedTypeOfProperty = Array.isArray(tempParsed) || (typeof tempParsed === 'object' && tempParsed !== null) ? tempParsed : typeOfProperty;
+        } catch (e) {
+            // If parsing fails, use the raw string value (e.g., if it was just "Hazardous Materials")
+            parsedTypeOfProperty = typeOfProperty;
+        }
+    }
+    // --- FIX END ---
+
+    // Create the USDOT application
+    const applicationData = {
+      userId,
+      firstName,
+      lastName,
+      businessName,
+      email,
+      areaCode,
+      phoneNumber,
+      serviceOffered,
+      typeOfProperty: JSON.stringify(typeOfProperty), // Store as JSON string
+      numberOfVehicles,
+      typeOfVehicle,
+      ownershipOfVehicle,
+      interstateIntrastate,
+      driversLicenseFileName,
+      businessLicenseFileName,
+    };
+
+
+
+    const newApplication = await UsdotApplication.create(applicationData);
+    return newApplication;
+
+
+  } catch (error) {
+    console.error("Error during USDOT application creation:", error.message);
+    throw new Error(error.message || "An error occurred during USDOT application creation.");
+  }
+};
+
+exports.fetchUsdotapplications = async () => {
+  try {
+    const applications = await UsdotApplication.findAll({
+      // Optionally order by creation date, latest first
+      order: [['createdAt', 'DESC']], 
+    });
+    return applications;
+  } catch (error) {
+    console.error("Error during fetching USDOT applications:", error.message);
+    throw new Error(error.message || "An error occurred during fetching USDOT applications.");
+  }
+};
+
 
 exports.updateUser = async (data, filter) => {
   const result = await User.update(data, filter);

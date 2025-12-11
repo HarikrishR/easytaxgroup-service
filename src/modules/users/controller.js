@@ -145,3 +145,40 @@ exports.updateById = async (req, res, next) => {
     console.error(error);
   }
 };
+
+
+exports.createUsdotapplication = async (req, res, next) => {
+  try {
+    const formData = req.body;
+    console.log(formData);
+    await userService.createUsdotapplication(formData);
+
+    res.status(200).json({
+      status: "success",
+      message: "Form created successfully.",
+      data: formData,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
+exports.fetchUsdotapplications = async (req, res, next) => {
+  try {
+    const applications = await userService.fetchUsdotapplications();
+
+    res.status(200).json({
+      status: "success",
+      message: "USDOT Applications fetched successfully.",
+      data: applications,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};

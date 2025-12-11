@@ -24,3 +24,21 @@ module.exports = {
     updatedAt: Joi.date(),
   }),
 };
+
+exports.createUsdotApplicationSchema = Joi.object({
+  userId: Joi.string().required(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  businessName: Joi.string().required(),
+  email: Joi.string().email().required(),
+  areaCode: Joi.string().required(),
+  phoneNumber: Joi.string().required(),
+  serviceOffered: Joi.string().required(),
+  typeOfProperty: Joi.array().items(Joi.string()),
+  numberOfVehicles: Joi.number().required(),
+  typeOfVehicle: Joi.string().required(),
+  ownershipOfVehicle: Joi.string().required(),
+  interstateIntrastate: Joi.string().required(),
+  driversLicenseFileName: Joi.string(),
+  businessLicenseFileName: Joi.string(),
+});
