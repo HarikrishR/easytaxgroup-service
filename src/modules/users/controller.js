@@ -168,7 +168,7 @@ exports.createUsdotapplication = async (req, res, next) => {
 
 exports.fetchUsdotapplications = async (req, res, next) => {
   try {
-    const applications = await userService.fetchUsdotapplications();
+    const applications = await userService.fetchUsdotapplications(req.query);
 
     res.status(200).json({
       status: "success",

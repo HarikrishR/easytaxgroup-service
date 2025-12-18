@@ -330,13 +330,41 @@ exports.createUsdotapplication = async (userData) => {
   }
 };
 
-exports.fetchUsdotapplications = async () => {
+exports.fetchUsdotapplications = async (query) => { // <-- ACCEPT QUERY
   try {
-    const applications = await UsdotApplication.findAll({
-      // Optionally order by creation date, latest first
-      order: [['createdAt', 'DESC']], 
+    const { page = 1, limit = 10, search = '' } = query; // <-- DESTRUCTURE & SET DEFAULTS
+    const offset = (page - 1) * limit;
+
+    const where = {};
+    if (search) {
+      const searchLike = `%${search}%`;
+      // Use Op.or to search across multiple fields (e.g., businessName, email, name fields)
+      where[Op.or] = [
+        // { businessName: { [Op.iLike]: searchLike } },
+        { email: { [Op.iLike]: searchLike } },
+        { firstName: { [Op.iLike]: searchLike } },
+        { lastName: { [Op.iLike]: searchLike } },
+        { phoneNumber: { [Op.iLike]: searchLike } },
+        // { serviceOffered: { [Op.iLike]: searchLike } },
+      ];
+    }
+
+    // Use findAll and count to get both paginated data and total count
+    const result = await UsdotApplication.findAndCountAll({
+      where, // <-- APPLY SEARCH FILTER
+      limit: parseInt(limit, 10), // <-- APPLY LIMIT
+      offset: parseInt(offset, 10), // <-- APPLY OFFSET
+      order: [['createdAt', 'DESC']],
     });
-    return applications;
+
+    // Return the rows (data) and the total count
+    return {
+      data: result.rows,
+      totalCount: result.count,
+      currentPage: parseInt(page, 10),
+      totalPages: Math.ceil(result.count / limit),
+    };
+
   } catch (error) {
     console.error("Error during fetching USDOT applications:", error.message);
     throw new Error(error.message || "An error occurred during fetching USDOT applications.");
