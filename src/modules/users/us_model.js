@@ -9,14 +9,14 @@ const UsdotApplication = sequelize.define(
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
     },
-    userId: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      references: {
-        model: "users",
-        key: "userId",
-      },
-    },
+    // userId: {
+    //   type: DataTypes.STRING,
+    //   allowNull: false,
+    //   references: {
+    //     model: "users",
+    //     key: "userId",
+    //   },
+    // },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -67,7 +67,7 @@ const UsdotApplication = sequelize.define(
     },
     driversLicenseFileName: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
     businessLicenseFileName: {
       type: DataTypes.STRING,

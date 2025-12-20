@@ -267,20 +267,20 @@ exports.createUsdotapplication = async (userData) => {
       typeOfVehicle,
       ownershipOfVehicle,
       interstateIntrastate,
-      userId,
+      // userId,
       driversLicenseFileName,
       businessLicenseFileName,
     } = userData;
 
     // Check if application already exists for this user
     
-    const existingApplication = await UsdotApplication.findOne({
-      where: { userId },
-    });
+    // const existingApplication = await UsdotApplication.findOne({
+    //   where: { userId },
+    // });
 
-    if (existingApplication) {
-      throw new Error("USDOT application already exists for this user.");
-    }
+    // if (existingApplication) {
+    //   throw new Error("USDOT application already exists for this user.");
+    // }
 
     // --- FIX START: Safely parse typeOfProperty if it's a string ---
     let parsedTypeOfProperty = typeOfProperty;
@@ -301,7 +301,7 @@ exports.createUsdotapplication = async (userData) => {
 
     // Create the USDOT application
     const applicationData = {
-      userId,
+      // userId,
       firstName,
       lastName,
       businessName,
@@ -318,12 +318,8 @@ exports.createUsdotapplication = async (userData) => {
       businessLicenseFileName,
     };
 
-
-
     const newApplication = await UsdotApplication.create(applicationData);
     return newApplication;
-
-
   } catch (error) {
     console.error("Error during USDOT application creation:", error.message);
     throw new Error(error.message || "An error occurred during USDOT application creation.");
