@@ -1,5 +1,7 @@
 const User = require("./model");
 const UsdotApplication = require("./us_model");
+const BusinessRegistrationApplication = require("./businessReg_model");
+const FormF1VisaRegistrationApplication = require("./formF1VisaReg_model");
 const { Op } = require("sequelize");
 const CryptoJS = require("crypto-js");
 const nodemailer = require("nodemailer");
@@ -120,13 +122,13 @@ exports.forgotPassword = async (userData) => {
       const transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "harikrish12498@gmail.com", // Replace with your email
-        pass: "xzhwoeqkpdzrnbta", // Replace with your email password or app password
+        user: process.env.NODE_MAILER_AUTH_USER, // Replace with your email
+        pass: process.env.NODE_MAILER_AUTH_PASS, // Replace with your email password or app password
       },
       });
 
       const mailOptions = {
-      from: "harikrish12498@gmail.com", // Replace with your email
+      from: process.env.NODE_MAILER_AUTH_USER, // Replace with your email
       to: email,
       subject: "Easy TAX Password Reset Code",
       text: `We received a request to reset your password. Use the code below to proceed: **Reset Code:** ${resetCode} This code will expire in 15 minutes. If you didn’t request a password reset, please ignore this email.`,
@@ -319,6 +321,19 @@ exports.createUsdotapplication = async (userData) => {
     };
 
     const newApplication = await UsdotApplication.create(applicationData);
+
+    const transporter = await nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.NODE_MAILER_AUTH_USER, 
+        pass: process.env.NODE_MAILER_AUTH_PASS, 
+      },
+    });
+
+    await mailSender(transporter, process.env.NODE_MAILER_AUTH_USER, 'Easy TAX Group | US Dot Registration', `Hi Team, We have successfully reveived US Dot Application. from ${firstName} ${lastName} . Please check the admin panel for more details.`);
+    
+    await mailSender(transporter, email, 'Easy TAX Group | US Dot Registration', `Hi ${firstName} ${lastName}, We have successfully reveived US Dot Application. Our team will get back to you shortly. Thank you for choosing Easy TAX Group!`);
+
     return newApplication;
   } catch (error) {
     console.error("Error during USDOT application creation:", error.message);
@@ -364,6 +379,207 @@ exports.fetchUsdotapplications = async (query) => { // <-- ACCEPT QUERY
   } catch (error) {
     console.error("Error during fetching USDOT applications:", error.message);
     throw new Error(error.message || "An error occurred during fetching USDOT applications.");
+  }
+};
+
+exports.createBusinessRegistrationApplication = async (userData) => {
+  try {
+    const {
+      businessName,
+      businessType,
+      businessAddressLineOne,
+      businessAddressLineTwo,
+      businessAddressCity,
+      businessAddressState,
+      businessAddressZip,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      ssn,
+      secoundaryFirstName,
+      secoundaryLastName,
+      secoundaryEmail,
+      secoundaryPhoneNumber,
+      secoundarySSN,
+      primaryDiversLicenseFileName,
+      secondaryDiversLicenseFileName,
+      } = userData;
+
+
+    // Create the USDOT application
+    const applicationData = {
+      businessName,
+      businessType,
+      businessAddressLineOne,
+      businessAddressLineTwo,
+      businessAddressCity,
+      businessAddressState,
+      businessAddressZip,
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      ssn,
+      secoundaryFirstName,
+      secoundaryLastName,
+      secoundaryEmail,
+      secoundaryPhoneNumber,
+      secoundarySSN,
+      primaryDiversLicenseFileName,
+      secondaryDiversLicenseFileName,
+    };
+
+    const newApplication = await BusinessRegistrationApplication.create(applicationData);
+
+    const transporter = await nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.NODE_MAILER_AUTH_USER, 
+        pass: process.env.NODE_MAILER_AUTH_PASS, 
+      },
+    });
+
+    await mailSender(transporter, process.env.NODE_MAILER_AUTH_USER, 'Easy TAX Group | Business Registration', `Hi Team, We have successfully reveived Business Registration Application. from ${firstName} ${lastName} . Please check the admin panel for more details.`);
+    
+    await mailSender(transporter, email, 'Easy TAX Group | Business Registration', `Hi ${firstName} ${lastName}, We have successfully reveived Business Registration Application. Our team will get back to you shortly. Thank you for choosing Easy TAX Group!`);
+
+    return newApplication;
+  } catch (error) {
+    console.error("Error during Business Registration application creation:", error.message);
+    throw new Error(error.message || "An error occurred during Business Registration application creation.");
+  }
+};
+
+exports.fetchBusinessRegistrationApplications = async (query) => { // <-- ACCEPT QUERY
+  try {
+    const { page = 1, limit = 10, search = '' } = query; // <-- DESTRUCTURE & SET DEFAULTS
+    const offset = (page - 1) * limit;
+
+    const where = {};
+    if (search) {
+      const searchLike = `%${search}%`;
+      where[Op.or] = [
+        { email: { [Op.iLike]: searchLike } },
+        { firstName: { [Op.iLike]: searchLike } },
+        { lastName: { [Op.iLike]: searchLike } },
+        { phoneNumber: { [Op.iLike]: searchLike } },
+      ];
+    }
+
+    const result = await BusinessRegistrationApplication.findAndCountAll({
+      where, // <-- APPLY SEARCH FILTER
+      limit: parseInt(limit, 10), // <-- APPLY LIMIT
+      offset: parseInt(offset, 10), // <-- APPLY OFFSET
+      order: [['createdAt', 'DESC']],
+    });
+
+    // Return the rows (data) and the total count
+    return {
+      data: result.rows,
+      totalCount: result.count,
+      currentPage: parseInt(page, 10),
+      totalPages: Math.ceil(result.count / limit),
+    };
+
+  } catch (error) {
+    console.error("Error during fetching Business Registration applications:", error.message);
+    throw new Error(error.message || "An error occurred during fetching Business Registration applications.");
+  }
+};
+
+const mailSender = async (transporter, toEmail, subject, body) => {
+  const mailOptions = {
+    from: process.env.NODE_MAILER_AUTH_USER, 
+    to: toEmail,
+    subject: subject,
+    text: body ,
+  };
+
+  await transporter.sendMail(mailOptions);
+}
+
+exports.createFormF1VisaRegApp = async (userData) => {
+  try {
+    const {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      visaStatus,
+      stateOfResidency,
+      referalName,
+      referalPhoneNumber,
+      } = userData;
+
+
+    // Create the USDOT application
+    const applicationData = {
+      firstName,
+      lastName,
+      email,
+      phoneNumber,
+      visaStatus,
+      stateOfResidency,
+      referalName,
+      referalPhoneNumber,
+    };
+
+    const newApplication = await FormF1VisaRegistrationApplication.create(applicationData);
+
+    const transporter = await nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.NODE_MAILER_AUTH_USER, 
+        pass: process.env.NODE_MAILER_AUTH_PASS, 
+      },
+    });
+
+    await mailSender(transporter, process.env.NODE_MAILER_AUTH_USER, 'Easy TAX Group | F1 Visa Registration', `Hi Team, We have successfully reveived F1 Visa Application. from ${firstName} ${lastName} . Please check the admin panel for more details.`);
+    
+    await mailSender(transporter, email, 'Easy TAX Group | F1 Visa Registration', `Hi ${firstName} ${lastName}, We have successfully reveived F1 Visa Application. Our team will get back to you shortly. Thank you for choosing Easy TAX Group!`);
+
+    return newApplication;
+  } catch (error) {
+    console.error("Error during F1 Visa application creation:", error.message);
+    throw new Error(error.message || "An error occurred during F1 Visa application creation.");
+  }
+};
+
+exports.fetchFormF1VisaRegApp = async (query) => { // <-- ACCEPT QUERY
+  try {
+    const { page = 1, limit = 10, search = '' } = query; // <-- DESTRUCTURE & SET DEFAULTS
+    const offset = (page - 1) * limit;
+
+    const where = {};
+    if (search) {
+      const searchLike = `%${search}%`;
+      where[Op.or] = [
+        { email: { [Op.iLike]: searchLike } },
+        { firstName: { [Op.iLike]: searchLike } },
+        { lastName: { [Op.iLike]: searchLike } },
+        { phoneNumber: { [Op.iLike]: searchLike } },
+      ];
+    }
+
+    const result = await FormF1VisaRegistrationApplication.findAndCountAll({
+      where, // <-- APPLY SEARCH FILTER
+      limit: parseInt(limit, 10), // <-- APPLY LIMIT
+      offset: parseInt(offset, 10), // <-- APPLY OFFSET
+      order: [['createdAt', 'DESC']],
+    });
+
+    // Return the rows (data) and the total count
+    return {
+      data: result.rows,
+      totalCount: result.count,
+      currentPage: parseInt(page, 10),
+      totalPages: Math.ceil(result.count / limit),
+    };
+
+  } catch (error) {
+    console.error("Error during fetching Business Registration applications:", error.message);
+    throw new Error(error.message || "An error occurred during fetching Business Registration applications.");
   }
 };
 

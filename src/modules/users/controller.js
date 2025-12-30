@@ -182,3 +182,74 @@ exports.fetchUsdotapplications = async (req, res, next) => {
     });
   }
 };
+
+exports.createBusinessRegistrationApplication = async (req, res, next) => {
+  try {
+    const formData = req.body;
+    console.log(formData);
+    await userService.createBusinessRegistrationApplication(formData);
+
+    res.status(200).json({
+      status: "success",
+      message: "Form created successfully.",
+      data: formData,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
+exports.fetchBusinessRegistrationApplications = async (req, res, next) => {
+  try {
+    const applications = await userService.fetchBusinessRegistrationApplications(req.query);
+
+    res.status(200).json({
+      status: "success",
+      message: "Business Registration Applications fetched successfully.",
+      data: applications,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
+exports.createFormF1VisaRegApp = async (req, res, next) => {
+  try {
+    const formData = req.body;
+    await userService.createFormF1VisaRegApp(formData);
+
+    res.status(200).json({
+      status: "success",
+      message: "Form created successfully.",
+      data: formData,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
+exports.fetchFormf1RegApp = async (req, res, next) => {
+  try {
+    const applications = await userService.fetchFormF1VisaRegApp(req.query);
+
+    res.status(200).json({
+      status: "success",
+      message: "Business Registration Applications fetched successfully.",
+      data: applications,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};

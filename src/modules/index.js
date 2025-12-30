@@ -5,6 +5,7 @@ const transaction = require("./transactions/controller");
 const orders = require("./orders/controller");
 // 1. IMPORT THE NEW ROUTER FILE
 const usdotApplicationRouter = require("./users/usdot_routes");
+const businessResgistrationApplicationRouter = require("./users/businessReg_routes");
 
 router.post("/signup", user.addUser);
 router.post("/signin", user.signInUser);
@@ -23,5 +24,10 @@ router.get("/fetchOrders", orders.fetchOrders);
 router.post("/updateOrderStatus", orders.updateOrderStatus);
 router.get("/fetchUsdotapplications", user.fetchUsdotapplications);
 router.use(usdotApplicationRouter); 
+router.get("/fetchBusinessRegApplication", user.fetchBusinessRegistrationApplications);
+router.use(businessResgistrationApplicationRouter); 
+router.post("/formf1Registration", user.createFormF1VisaRegApp);
+router.get("/fetchFormf1RegApplication", user.fetchFormf1RegApp);
+
 
 module.exports = router;

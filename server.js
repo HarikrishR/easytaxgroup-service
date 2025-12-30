@@ -1,5 +1,9 @@
 const http = require("http");
 const dotenv = require('dotenv');
+
+// Assign the fallback to the process environment so other files can see it
+process.env.NODE_ENV = process.env.NODE_ENV || 'local';
+
 const env = process.env.NODE_ENV || 'local';
 dotenv.config({ path: `.env.${env}` });
 

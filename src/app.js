@@ -6,7 +6,7 @@ const path = require('path');
 require("./utils/db");
 
 const app = express();
-app.use('/uploads', express.static(path.join(__dirname, 'modules', 'uploads')));
+app.use('/api/uploads', express.static(path.join(__dirname, 'modules', 'uploads')));
 
 const limiter = rateLimit({
   max: 1000,

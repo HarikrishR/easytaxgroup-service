@@ -42,3 +42,33 @@ exports.createUsdotApplicationSchema = Joi.object({
   driversLicenseFileName: Joi.string(),
   businessLicenseFileName: Joi.string(),
 });
+
+exports.businessRegistrationSchema = Joi.object({
+  businessName: Joi.string().required(),
+  userId: Joi.string().required(),
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  email: Joi.string().email().required(),
+  areaCode: Joi.string().required(),
+  phoneNumber: Joi.string().required(),
+  serviceOffered: Joi.string().required(),
+  typeOfProperty: Joi.array().items(Joi.string()),
+  numberOfVehicles: Joi.number().required(),
+  typeOfVehicle: Joi.string().required(),
+  ownershipOfVehicle: Joi.string().required(),
+  interstateIntrastate: Joi.string().required(),
+  driversLicenseFileName: Joi.string(),
+  businessLicenseFileName: Joi.string(),
+});
+
+
+exports.formF1VisaRegistrationSchema = Joi.object({
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  email: Joi.string().email().required(),
+  phoneNumber: Joi.string().required(),
+  visaStatus: Joi.string().required(),
+  stateOfResidency: Joi.string().required(),
+  referalName: Joi.string().required(),
+  referalPhoneNumber: Joi.string().required(),
+});
