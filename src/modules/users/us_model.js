@@ -74,7 +74,7 @@ const UsdotApplication = sequelize.define(
       allowNull: true,
     },
     status: {
-      type: DataTypes.ENUM("pending", "approved", "rejected"),
+      type: DataTypes.ENUM("pending", "working", "approved", "rejected"),
       defaultValue: "pending",
     },
     createdAt: {

@@ -382,6 +382,37 @@ exports.fetchUsdotapplications = async (query) => { // <-- ACCEPT QUERY
   }
 };
 
+exports.updateUsDotAppStatus = async (applicationId, status) => {
+  try {
+    // 1. Create a date string in EST/EDT
+    const estDate = new Date().toLocaleString("en-US", {
+      timeZone: "America/New_York"
+    });
+    
+    const result = await UsdotApplication.update(
+      { 
+        status: status, 
+        updatedAt: new Date(estDate) 
+      }, 
+      {
+        where: {
+          // Ensure this matches your model's primary key (applicationId or id)
+          applicationId: applicationId 
+        }
+      }
+    );
+
+    if (result[0] === 0) {
+      throw new Error("Application not found or status unchanged.");
+    }
+
+    return result;
+  } catch (error) {
+    console.error("Error updating Business Registration status:", error.message);
+    throw new Error(error.message || "An error occurred during status update.");
+  }
+};
+
 exports.createBusinessRegistrationApplication = async (userData) => {
   try {
     const {
@@ -485,6 +516,39 @@ exports.fetchBusinessRegistrationApplications = async (query) => { // <-- ACCEPT
   } catch (error) {
     console.error("Error during fetching Business Registration applications:", error.message);
     throw new Error(error.message || "An error occurred during fetching Business Registration applications.");
+  }
+};
+
+exports.updateBusinessRegStatus = async (applicationId, status) => {
+  try {
+    // 1. Create a date string in EST/EDT
+    const estDate = new Date().toLocaleString("en-US", {
+      timeZone: "America/New_York"
+    });
+
+    const result = await BusinessRegistrationApplication.update(
+      { 
+        status: status, 
+        updatedAt: new Date(estDate) 
+      }, 
+      {
+        where: {
+          // Ensure this matches your model's primary key (applicationId or id)
+          applicationId: applicationId 
+        }
+      }
+    );
+
+    if (result[0] === 0) {
+      throw new Error("Application not found or status unchanged.");
+    }
+
+    return result;
+  } catch (error) {
+
+    console.error("Error updating Business Registration status:");
+    console.error(error.message);
+    throw new Error(error.message || "An error occurred during status update.");
   }
 };
 

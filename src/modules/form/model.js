@@ -38,6 +38,10 @@ const Form8843 = sequelize.define(
       type: DataTypes.BOOLEAN,
       allowNull: true,
     },
+    wantToFile2025: {
+      type: DataTypes.BOOLEAN,
+      allowNull: true,
+    },
     passportNumber: {
       type: DataTypes.STRING(20),
       allowNull: true,

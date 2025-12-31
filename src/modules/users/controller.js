@@ -183,6 +183,25 @@ exports.fetchUsdotapplications = async (req, res, next) => {
   }
 };
 
+exports.updateUsDotAppStatus = async (req, res, next) => {
+  try {
+    const { applicationId } = req.params;
+    const { status } = req.body;
+
+    await userService.updateUsDotAppStatus(applicationId, status);
+
+    res.status(200).json({
+      status: "success",
+      message: "Status updated successfully.",
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
 exports.createBusinessRegistrationApplication = async (req, res, next) => {
   try {
     const formData = req.body;
@@ -193,6 +212,25 @@ exports.createBusinessRegistrationApplication = async (req, res, next) => {
       status: "success",
       message: "Form created successfully.",
       data: formData,
+    });
+  } catch (error) {
+    return res.status(400).json({
+      status: 400,
+      message: error.message,
+    });
+  }
+};
+
+exports.updateBusinessRegStatus = async (req, res, next) => {
+  try {
+    const { applicationId } = req.params;
+    const { status } = req.body;
+
+    await userService.updateBusinessRegStatus(applicationId, status);
+
+    res.status(200).json({
+      status: "success",
+      message: "Status updated successfully.",
     });
   } catch (error) {
     return res.status(400).json({

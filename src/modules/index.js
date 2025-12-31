@@ -28,6 +28,7 @@ router.get("/fetchBusinessRegApplication", user.fetchBusinessRegistrationApplica
 router.use(businessResgistrationApplicationRouter); 
 router.post("/formf1Registration", user.createFormF1VisaRegApp);
 router.get("/fetchFormf1RegApplication", user.fetchFormf1RegApp);
-
+router.patch("/updateBusinessRegStatus/:applicationId", user.updateBusinessRegStatus);
+router.patch("/updateUsDotAppStatus/:applicationId", user.updateUsDotAppStatus);
 
 module.exports = router;
