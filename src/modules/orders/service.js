@@ -20,33 +20,59 @@ exports.createOrder = async (userData) => {
     }
   };
 
-  exports.fetchOrders = async () => {
+  exports.fetchOrders = async (query) => {
     try {
-  
-      // Check if the user exists
-      Orders.belongsTo(User, { foreignKey: "userId", targetKey: "userId",});
-      Orders.belongsTo(Form8843, { foreignKey: "userId", targetKey: "userId",});
+        const { page = 1, limit = 10, search = '' } = query;
+        const offset = (page - 1) * limit;
 
-    const existingOrders = await Orders.findAll({
-      include: [
-        {
-            model: User,
-            attributes: { exclude: ["id", "password", "token", "createdAt", "updatedAt", "deletedAt"] }, // Exclude sensitive information
-        },
-        {
-            model: Form8843,
-            attributes: { exclude: ["id", "createdAt", "updatedAt"] }, // Exclude sensitive information
-        },
-      ],
-      order: [["createdAt", "DESC"]], // Fetch data in descending order based on creation date
-    });
+        const where = {};
+        if (search) {
+            const searchLike = `%${search}%`;
+            where[Op.or] = [
+                // Change 'User' to 'user' if that is your model name
+                { '$user.email$': { [Op.iLike]: searchLike } },
+                { '$user.firstName$': { [Op.iLike]: searchLike } },
+                { '$user.lastName$': { [Op.iLike]: searchLike } },
+                { '$user.phoneNumber$': { [Op.iLike]: searchLike } },
+                { orderId: { [Op.iLike]: searchLike } } 
+            ];
+        }
 
-      return existingOrders;
-  
+        // Define associations (Ideally these should be in your models/index.js)
+        Orders.belongsTo(User, { foreignKey: "userId", targetKey: "userId" });
+        Orders.belongsTo(Form8843, { foreignKey: "userId", targetKey: "userId" });
+
+        const existingOrders = await Orders.findAndCountAll({
+            include: [
+                {
+                    model: User,
+                    // Ensure the model name here matches the name in your '$User.email$' string
+                    attributes: { exclude: ["id", "password", "token", "createdAt", "updatedAt", "deletedAt"] },
+                },
+                {
+                    model: Form8843,
+                    attributes: { exclude: ["id", "createdAt", "updatedAt"] },
+                },
+            ],
+            where, 
+            limit: parseInt(limit, 10),
+            offset: parseInt(offset, 10),
+            order: [["createdAt", "DESC"]],
+            // subQuery: false is often required when filtering on included models with limit/offset
+            subQuery: false, 
+        });
+
+        return {
+            data: existingOrders.rows,
+            totalCount: existingOrders.count,
+            currentPage: parseInt(page, 10),
+            totalPages: Math.ceil(existingOrders.count / limit),
+        };
+
     } catch (error) {
-      throw new Error(error.message || "An error occurred during fetching all orders.");
+        throw new Error(error.message || "An error occurred during fetching all orders.");
     }
-  };
+};
 
 //   const orders = await Orders.findAll({
 //     where: { userId },

@@ -20,7 +20,7 @@ exports.createOrder = async (req, res, next) => {
 
 exports.fetchOrders = async (req, res, next) => {
   try {
-    var order = await service.fetchOrders();
+    var order = await service.fetchOrders(req.query);
 
     res.status(200).json({
       status: "success",
